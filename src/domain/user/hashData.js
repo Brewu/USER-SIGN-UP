@@ -8,4 +8,16 @@ const hashData=async (data,saltRounds=10)=>{
         throw error
     }
 }
-module.exports={hashData}
+
+const verifyhashedData = async (unhashed, hashed) => {
+    try {
+        return await bcrypt.compare(unhashed, hashed);
+    } catch (error) {
+        console.error("Error verifying hashed data:", error);
+        return false; // Explicitly return false on error
+    }
+};
+
+module.exports = { verifyhashedData };
+
+module.exports={hashData,verifyhashedData}

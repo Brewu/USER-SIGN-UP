@@ -1,8 +1,29 @@
 const express=require("express")
 const router=express.Router()
-const {createUser}=require('./controller')
-router.post('/SignUp',
+const {createUser, authenticateUser,}=require('./controller')
+router.post("/", async (req, res) => {
+    try {
+        let { email, password } = req.body;
+        
+        // Trim input values
+        email = email?.trim();
+        password = password?.trim();
+        
+        // Validate input
+        if (!email || !password) {
+            throw new Error("Empty credentials. Try again");
+        }
 
+        // Authenticate user (assuming you have a function named authenticateUser)
+        const authenticatedUser = await authenticateUser({ email, password });
+
+        res.status(200).json(authenticatedUser);
+    } catch (error) {
+        res.status(400).send(error?.message || "An error occurred");
+    }
+});
+
+router.post('/SignUp',
 async(req, res)=>{
     try {
        let {name,email,password}=req.body;
@@ -36,4 +57,5 @@ res.status(200).json(newUser)
     }
 }
 )
+
 module.exports=router
