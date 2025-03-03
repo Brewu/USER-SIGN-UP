@@ -1,6 +1,15 @@
 const express=require("express")
 const router=express.Router()
+const auth=require("./../../MIddleware/auth")
+
+
 const {createUser, authenticateUser,}=require('./controller')
+
+router.get("/private_data",auth,(req,res)=>{
+    res
+    .status(200)
+    .send(`You're in a private territory of ${req.currentUser.email}` )
+})
 router.post("/", async (req, res) => {
     try {
         let { email, password } = req.body;
